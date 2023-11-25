@@ -5,9 +5,11 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import {Link} from '@inertiajs/vue3';
+import {Link, usePage} from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const authUser = usePage().props.auth.user;
 </script>
 
 <template>
@@ -31,14 +33,14 @@ const showingNavigationDropdown = ref(false);
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <!-- Settings Dropdown -->
                         <div class="ms-3 relative">
-                            <Dropdown align="right" width="48">
+                            <Dropdown v-if="authUser" align="right" width="48">
                                 <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
                                                 class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                {{ $page.props.auth.user.name }}
+                                                {{ authUser.name }}
 
                                                 <svg
                                                     class="ms-2 -me-0.5 h-4 w-4"
@@ -57,12 +59,19 @@ const showingNavigationDropdown = ref(false);
                                 </template>
 
                                 <template #content>
-                                    <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
+                                    <DropdownLink :href="route('profile', {username: authUser.username })">
+                                        Profile
+                                    </DropdownLink>
                                     <DropdownLink :href="route('logout')" method="post" as="button">
                                         Log Out
                                     </DropdownLink>
                                 </template>
                             </Dropdown>
+                            <div v-else>
+                                <Link :href="route('login')">
+                                    Login
+                                </Link>
+                            </div>
                         </div>
                     </div>
 
@@ -107,19 +116,25 @@ const showingNavigationDropdown = ref(false);
 
                 <!-- Responsive Settings Options -->
                 <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                    <div class="px-4">
-                        <div class="font-medium text-base text-gray-800 dark:text-gray-200">
-                            {{ $page.props.auth.user.name }}
+                    <template v-if="authUser">
+                        <div class="px-4">
+                            <div class="font-medium text-base text-gray-800 dark:text-gray-200">
+                                {{ authUser.name }}
+                            </div>
+                            <div class="font-medium text-sm text-gray-500">{{ authUser.email }}</div>
                         </div>
-                        <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
-                    </div>
 
-                    <div class="mt-3 space-y-1">
-                        <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                            Log Out
-                        </ResponsiveNavLink>
-                    </div>
+                        <div class="mt-3 space-y-1">
+                            <ResponsiveNavLink :href="route('profile', {username: authUser.username })"> Profile
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                                Log Out
+                            </ResponsiveNavLink>
+                        </div>
+                    </template>
+                    <template>
+                        Login button
+                    </template>
                 </div>
             </div>
         </nav>
