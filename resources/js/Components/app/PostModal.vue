@@ -35,13 +35,15 @@
                                     class="flex items-center justify-between py-3 px-4 font-medium bg-gray-100 text-gray-900"
                                 >
                                     Update Post
-                                    <button @click="show = false" class="w-8 h-8 rounded-full hover:bg-black/5 transition flex items-center justify-center">
-                                        <XMarkIcon class="w-4 h-4" />
+                                    <button @click="show = false"
+                                            class="w-8 h-8 rounded-full hover:bg-black/5 transition flex items-center justify-center">
+                                        <XMarkIcon class="w-4 h-4"/>
                                     </button>
                                 </DialogTitle>
                                 <div class="p-4">
                                     <PostUserHeader :post="post" :show-time="false" class="mb-4"/>
-                                    <InputTextarea v-model="form.body" class="mb-3 w-full" />
+                                    <ckeditor :editor="editor" v-model="form.body" :config="editorConfig"></ckeditor>
+                                    <!--                                    <InputTextarea v-model="form.body" class="mb-3 w-full"/>-->
                                 </div>
 
                                 <div class="py-3 px-4">
@@ -75,6 +77,12 @@ import {
 import InputTextarea from "@/Components/InputTextarea.vue";
 import PostUserHeader from "@/Components/app/PostUserHeader.vue";
 import {useForm} from "@inertiajs/vue3";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+const editor = ClassicEditor;
+const editorConfig = {
+    toolbar: [ 'heading',  '|', 'bold', 'italic', '|', 'link', '|', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote'],
+}
 
 const props = defineProps({
     post: {
@@ -105,7 +113,7 @@ function closeModal() {
     show.value = false
 }
 
-function submit(){
+function submit() {
     form.put(route('post.update', props.post.id), {
         preserveScroll: true,
         onSuccess: () => {
