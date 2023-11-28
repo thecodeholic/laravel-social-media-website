@@ -34,7 +34,7 @@
                                     as="h3"
                                     class="flex items-center justify-between py-3 px-4 font-medium bg-gray-100 text-gray-900"
                                 >
-                                    Update Post
+                                    {{ form.id ? 'Update Post' : 'Create Post' }}
                                     <button @click="show = false"
                                             class="w-8 h-8 rounded-full hover:bg-black/5 transition flex items-center justify-center">
                                         <XMarkIcon class="w-4 h-4"/>
@@ -81,7 +81,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const editor = ClassicEditor;
 const editorConfig = {
-    toolbar: [ 'heading',  '|', 'bold', 'italic', '|', 'link', '|', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote'],
+    toolbar: ['bold', 'italic', '|', 'bulletedList', 'numberedList', '|', 'heading', '|', 'outdent', 'indent', '|', 'link', '|', 'blockQuote'],
 }
 
 const props = defineProps({
@@ -114,11 +114,22 @@ function closeModal() {
 }
 
 function submit() {
-    form.put(route('post.update', props.post.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            show.value = false
-        }
-    })
+    if (form.id) {
+        form.put(route('post.update', props.post.id), {
+            preserveScroll: true,
+            onSuccess: () => {
+                show.value = false
+                form.reset()
+            }
+        })
+    } else {
+        form.post(route('post.create'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                show.value = false
+                form.reset()
+            }
+        })
+    }
 }
 </script>
