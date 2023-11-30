@@ -121,4 +121,11 @@ class PostController extends Controller
 
         return back();
     }
+
+    public function downloadAttachment(PostAttachment $attachment)
+    {
+        // TODO check if user has permission to download that attachment
+
+        return response()->download(Storage::disk('public')->path($attachment->path), $attachment->name);
+    }
 }
