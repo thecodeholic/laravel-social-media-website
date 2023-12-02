@@ -125,7 +125,7 @@ function openAttachment(ind){
                     </div>
 
                     <!-- Download-->
-                    <a :href="route('post.download', attachment)"
+                    <a @click.stop :href="route('post.download', attachment)"
                         class="z-20 opacity-0 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-2 top-2 cursor-pointer hover:bg-gray-800">
                         <ArrowDownTrayIcon class="w-4 h-4" />
                     </a>
