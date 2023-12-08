@@ -13,6 +13,9 @@ class Comment extends Model
 {
     use HasFactory;
 
+    public int $numOfComments = 0;
+    public array $childComments = [];
+
     protected $fillable = ['post_id', 'comment', 'user_id', 'parent_id'];
 
     public function user(): BelongsTo
