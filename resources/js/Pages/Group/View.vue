@@ -89,6 +89,12 @@ function submitThurmbnailImage() {
     })
 }
 
+function joinToGroup() {
+    const form = useForm({})
+
+    form.post(route('group.join', props.group.slug))
+}
+
 </script>
 
 <template>
@@ -142,7 +148,8 @@ function submitThurmbnailImage() {
                 </div>
 
                 <div class="flex">
-                    <div class="flex items-center justify-center relative group/thumbnail -mt-[64px] ml-[48px] w-[128px] h-[128px] rounded-full">
+                    <div
+                        class="flex items-center justify-center relative group/thumbnail -mt-[64px] ml-[48px] w-[128px] h-[128px] rounded-full">
                         <img :src="thumbnailImageSrc || group.thumbnail_url || '/img/default_avatar.webp'"
                              class="w-full h-full object-cover rounded-full">
                         <button
@@ -170,10 +177,22 @@ function submitThurmbnailImage() {
                     <div class="flex justify-between items-center flex-1 p-4">
                         <h2 class="font-bold text-lg">{{ group.name }}</h2>
 
-                        <PrimaryButton @click="showInviteUserModal = true"
-                                       v-if="isCurrentUserAdmin">Invite Users</PrimaryButton>
-                        <PrimaryButton v-if="!group.role && group.auto_approval">Join to Group</PrimaryButton>
-                        <PrimaryButton v-if="!group.role && !group.auto_approval">Request to join</PrimaryButton>
+                        <PrimaryButton v-if="!authUser" :href="route('login')">
+                            Login to join to this group
+                        </PrimaryButton>
+
+                        <PrimaryButton v-if="isCurrentUserAdmin"
+                                       @click="showInviteUserModal = true">
+                            Invite Users
+                        </PrimaryButton>
+                        <PrimaryButton v-if="authUser && !group.role && group.auto_approval"
+                                       @click="joinToGroup">
+                            Join to Group
+                        </PrimaryButton>
+                        <PrimaryButton v-if="authUser && !group.role && !group.auto_approval"
+                                       @click="joinToGroup">
+                            Request to join
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>
@@ -212,7 +231,7 @@ function submitThurmbnailImage() {
             </div>
         </div>
     </AuthenticatedLayout>
-    <InviteUserModal v-model="showInviteUserModal" />
+    <InviteUserModal v-model="showInviteUserModal"/>
 </template>
 
 <style scoped>

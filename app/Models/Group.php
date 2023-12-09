@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Enums\GroupUserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -34,5 +36,11 @@ class Group extends Model
     public function isAdmin($userId): bool
     {
         return $this->currentUserGroup?->user_id == $userId;
+    }
+
+    public function adminUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'group_users')
+            ->wherePivot('role', GroupUserRole::ADMIN->value);
     }
 }
