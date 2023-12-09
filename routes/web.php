@@ -29,12 +29,18 @@ Route::get('/u/{user:username}', [ProfileController::class, 'index'])
 Route::get('/g/{group:slug}', [GroupController::class, 'profile'])
     ->name('group.profile');
 
+Route::get('/group/approve-invitation/{token}', [GroupController::class, 'approveInvitation'])
+    ->name('group.approveInvitation');
+
 Route::middleware('auth')->group(function () {
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
         ->name('profile.updateImages');
 
     Route::post('/group/update-images/{group:slug}', [GroupController::class, 'updateImage'])
         ->name('group.updateImages');
+
+    Route::post('/group/invite/{group:slug}', [GroupController::class, 'inviteUsers'])
+        ->name('group.inviteUsers');
 
 //    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -75,4 +81,4 @@ Route::middleware('auth')->group(function () {
         ->name('group.create');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
