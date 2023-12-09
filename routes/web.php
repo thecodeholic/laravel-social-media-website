@@ -36,6 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update-images', [ProfileController::class, 'updateImage'])
         ->name('profile.updateImages');
 
+
+    // Groups
+    Route::post('/group', [GroupController::class, 'store'])
+        ->name('group.create');
+    Route::put('/group/{group:slug}', [GroupController::class, 'update'])
+        ->name('group.update');
+
     Route::post('/group/update-images/{group:slug}', [GroupController::class, 'updateImage'])
         ->name('group.updateImages');
 
@@ -84,10 +91,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/comment/{comment}/reaction', [PostController::class, 'commentReaction'])
         ->name('comment.reaction');
 
-    // Groups
-
-    Route::post('/group', [GroupController::class, 'store'])
-        ->name('group.create');
 });
 
 require __DIR__ . '/auth.php';
