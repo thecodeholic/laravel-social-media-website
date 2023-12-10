@@ -61,4 +61,9 @@ class Post extends Model
             }])
             ->latest();
     }
+
+    public function isOwner($userId)
+    {
+        return $this->user_id == $userId;
+    }
 }

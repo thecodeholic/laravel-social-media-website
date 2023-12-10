@@ -37,4 +37,9 @@ class Comment extends Model
     {
         return $this->hasMany(self::class, 'parent_id');
     }
+
+    public function isOwner($userId)
+    {
+        return $this->user_id == $userId;
+    }
 }
