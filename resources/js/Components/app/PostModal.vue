@@ -23,6 +23,10 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    group: {
+        type: Object,
+        default: null
+    },
     modelValue: Boolean
 })
 
@@ -39,6 +43,7 @@ const attachmentErrors = ref([])
 const formErrors = ref({});
 const form = useForm({
     body: '',
+    group_id: null,
     attachments: [],
     deleted_file_ids: [],
     _method: 'POST'
@@ -89,13 +94,16 @@ function resetModal() {
 }
 
 function submit() {
+    if (props.group) {
+        form.group_id = props.group.id
+    }
     form.attachments = attachmentFiles.value.map(myFile => myFile.file)
-    console.log(form)
     if (props.post.id) {
         form._method = 'PUT'
         form.post(route('post.update', props.post.id), {
             preserveScroll: true,
             onSuccess: (res) => {
+                console.log(res)
                 closeModal()
             },
             onError: (errors) => {
@@ -211,6 +219,11 @@ function undoDelete(myFile) {
                                 </DialogTitle>
                                 <div class="p-4">
                                     <PostUserHeader :post="post" :show-time="false" class="mb-4"/>
+
+                                    <div v-if="formErrors.group_id" class="bg-red-400 py-2 px-3 rounded text-white mb-3">
+                                        {{formErrors.group_id}}
+                                    </div>
+
                                     <ckeditor :editor="editor" v-model="form.body" :config="editorConfig"></ckeditor>
 
                                     <div v-if="showExtensionsText" class="border-l-4 border-amber-500 py-2 px-3 bg-amber-100 mt-3 text-gray-800">
