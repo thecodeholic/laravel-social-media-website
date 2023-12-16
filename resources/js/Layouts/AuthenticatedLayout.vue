@@ -13,7 +13,7 @@ const keywords = ref(usePage().props.search)
 const authUser = usePage().props.auth.user;
 
 function search() {
-    router.get(route('search', keywords.value))
+    router.get(route('search', encodeURIComponent(keywords.value)))
 }
 </script>
 

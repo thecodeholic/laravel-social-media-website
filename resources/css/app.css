@@ -104,6 +104,11 @@
     color: blue;
 }
 
+.ck-content-output a.hashtag {
+    background-color: #eaf4ff;
+    color: #4156e2;
+}
+
 /* WebKit browsers (Chrome, Safari) */
 .comment-list::-webkit-scrollbar {
     width: 8px;

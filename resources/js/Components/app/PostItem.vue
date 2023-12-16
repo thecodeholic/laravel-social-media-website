@@ -8,12 +8,21 @@ import ReadMoreReadLess from "@/Components/app/ReadMoreReadLess.vue";
 import EditDeleteDropdown from "@/Components/app/EditDeleteDropdown.vue";
 import PostAttachments from "@/Components/app/PostAttachments.vue";
 import CommentList from "@/Components/app/CommentList.vue";
+import {computed} from "vue";
 
 const props = defineProps({
     post: Object
 })
 
 const emit = defineEmits(['editClick', 'attachmentClick'])
+
+const postBody = computed(() => props.post.body.replace(
+    /(#\w+)(?![^<]*<\/a>)/g,
+    (match, group) => {
+        const encodedGroup = encodeURIComponent(group);
+        return `<a href="/search/${encodedGroup}" class="hashtag">${group}</a>`;
+    })
+)
 
 function openEditModal() {
     emit('editClick', props.post)
@@ -50,7 +59,7 @@ function sendReaction() {
             <EditDeleteDropdown :user="post.user" :post="post" @edit="openEditModal" @delete="deletePost"/>
         </div>
         <div class="mb-3">
-            <ReadMoreReadLess :content="post.body"/>
+            <ReadMoreReadLess :content="postBody"/>
         </div>
         <div class="grid gap-3 mb-3" :class="[
             post.attachments.length === 1 ? 'grid-cols-1' : 'grid-cols-2'
