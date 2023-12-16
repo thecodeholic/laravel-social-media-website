@@ -309,7 +309,7 @@ class PostController extends Controller
             'messages' => [
                 [
                     'role' => 'user',
-                    'content' => "Please generate social media post content based on the following prompt. Generated formatted content with multiple paragraphs. Put hashtags after 2 lines from the main content". PHP_EOL .PHP_EOL. "Prompt: " .PHP_EOL
+                    'content' => "Please generate social media post content based on the following prompt. Generated formatted content with multiple paragraphs. Put hashtags after 2 lines from the main content" . PHP_EOL . PHP_EOL . "Prompt: " . PHP_EOL
                         . $prompt
                 ],
             ],
@@ -319,5 +319,37 @@ class PostController extends Controller
             'content' => $result->choices[0]->message->content
 //            'content' => "\"🎉 Exciting news! We're thrilled to announce that we just released a brand new feature on our app/website! 💥 Get ready to experience the next level of convenience and efficiency with this game-changing addition. 🚀 Try it out now and let us know what you think! 😍 #NewFeatureAlert #UpgradeYourExperience\""
         ]);
+    }
+
+    public function fetchUrlPreview(Request $request)
+    {
+        $data = $request->validate([
+            'url' => 'url'
+        ]);
+        $url = $data['url'];
+
+        $html = file_get_contents($url);
+
+        $dom = new \DOMDocument();
+
+        // Suppress warnings for malformed HTML
+        libxml_use_internal_errors(true);
+
+        // Load HTML content into the DOMDocument
+        $dom->loadHTML($html);
+
+        // Suppress warnings for malformed HTML
+        libxml_use_internal_errors(false);
+
+        $ogTags = [];
+        $metaTags = $dom->getElementsByTagName('meta');
+        foreach ($metaTags as $tag) {
+            $property = $tag->getAttribute('property');
+            if (str_starts_with($property, 'og:')) {
+                $ogTags[$property] = $tag->getAttribute('content');
+            }
+        }
+
+        return $ogTags;
     }
 }

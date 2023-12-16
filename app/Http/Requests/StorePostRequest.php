@@ -35,6 +35,8 @@ class StorePostRequest extends FormRequest
     {
         return [
             'body' => ['nullable', 'string'],
+            'preview' => ['nullable', 'array'],
+            'preview_url' => ['nullable', 'string'],
             'attachments' => [
                 'array',
                 'max:50',
@@ -68,10 +70,18 @@ class StorePostRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $body = $this->input('body') ?: '';
+        $previewUrl = $this->input('preview_url') ?: '';
+
+        $trimmedBody = trim(strip_tags($body));
+        if ($trimmedBody === $previewUrl) {
+            $body = '';
+        }
+
         // Add your custom key to the request data
         $this->merge([
             'user_id' => auth()->user()->id,
-            'body' => $this->input('body') ?: ''
+            'body' => $body
         ]);
     }
 
