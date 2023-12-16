@@ -8,7 +8,7 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue'
-import {isImage} from "@/helpers.js";
+import {isImage, isVideo} from "@/helpers.js";
 
 
 const props = defineProps({
@@ -85,16 +85,16 @@ function next() {
                                 class="flex flex-col w-full transform overflow-hidden bg-slate-800  text-left align-middle shadow-xl transition-all"
                             >
                                 <button @click="closeModal"
-                                        class="absolute right-3 top-3 z-30 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-gray-100">
+                                        class="absolute right-3 top-3 z-30 w-10 h-10 rounded-full hover:bg-black/10 transition flex items-center justify-center text-gray-100 z-40">
                                     <XMarkIcon class="w-6 h-6 "/>
                                 </button>
                                 <div class="relative group h-full ">
                                     <div @click="prev"
-                                         class="absolute opacity-0 group-hover:opacity-100 text-gray-100 cursor-pointer flex items-center w-12 h-full left-0 bg-black/5">
+                                         class="absolute opacity-0 group-hover:opacity-100 text-gray-100 cursor-pointer flex items-center w-12 h-full left-0 bg-black/5 z-30">
                                         <ChevronLeftIcon class="w-12"/>
                                     </div>
                                     <div @click="next"
-                                         class="absolute opacity-0 group-hover:opacity-100 text-gray-100 cursor-pointer flex items-center w-12 h-full right-0 bg-black/5">
+                                         class="absolute opacity-0 group-hover:opacity-100 text-gray-100 cursor-pointer flex items-center w-12 h-full right-0 bg-black/5 z-30">
                                         <ChevronRightIcon class="w-12"/>
                                     </div>
 
@@ -102,7 +102,11 @@ function next() {
                                         <img v-if="isImage(attachment)"
                                              :src="attachment.url"
                                              class="max-w-full max-h-full"/>
-                                        <div v-else class="p-32 flex flex-col justify-center items-center text-gray-100">
+                                        <div v-else-if="isVideo(attachment)" class="flex items-center">
+                                            <video :src="attachment.url" controls autoplay></video>
+                                        </div>
+                                        <div v-else
+                                             class="p-32 flex flex-col justify-center items-center text-gray-100">
                                             <PaperClipIcon class="w-10 h-10 mb-3"/>
 
                                             <small>{{ attachment.name }}</small>
