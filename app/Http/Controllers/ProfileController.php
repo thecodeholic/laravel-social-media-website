@@ -29,8 +29,11 @@ class ProfileController extends Controller
         }
         $followerCount = Follower::where('user_id', $user->id)->count();
 
-        $posts = Post::postsForTimeline(Auth::id())
+        $posts = Post::postsForTimeline(Auth::id(), false)
+            ->leftJoin('users AS u', 'u.pinned_post_id', 'posts.id')
             ->where('user_id', $user->id)
+            ->orderBy('u.pinned_post_id', 'desc')
+            ->orderBy('posts.created_at', 'desc')
             ->paginate(10);
 
         $posts = PostResource::collection($posts);
@@ -117,7 +120,7 @@ class ProfileController extends Controller
             if ($user->cover_path) {
                 Storage::disk('public')->delete($user->cover_path);
             }
-            $path = $cover->store('user-'.$user->id, 'public');
+            $path = $cover->store('user-' . $user->id, 'public');
             $user->update(['cover_path' => $path]);
             $success = 'Your cover image was updated';
         }
@@ -126,7 +129,7 @@ class ProfileController extends Controller
             if ($user->avatar_path) {
                 Storage::disk('public')->delete($user->avatar_path);
             }
-            $path = $avatar->store('user-'.$user->id, 'public');
+            $path = $avatar->store('user-' . $user->id, 'public');
             $user->update(['avatar_path' => $path]);
             $success = 'Your avatar image was updated';
         }
