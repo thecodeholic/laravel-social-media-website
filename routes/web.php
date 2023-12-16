@@ -93,6 +93,9 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/{post}/comment', [PostController::class, 'createComment'])
             ->name('post.comment.create');
+
+        Route::post('/ai-post', [PostController::class, 'aiPostContent'])
+            ->name('post.aiContent');
     });
 
     // Comments
