@@ -8,7 +8,6 @@ import {isImage} from "@/helpers.js";
 import axiosClient from "@/axiosClient.js";
 import UrlPreview from "@/Components/app/UrlPreview.vue";
 import BaseModal from "@/Components/app/BaseModal.vue";
-import "../../../css/ckeditor.css";
 
 const editor = ClassicEditor;
 const editorConfig = {
