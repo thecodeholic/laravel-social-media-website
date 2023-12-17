@@ -110,16 +110,58 @@
 }
 
 /* WebKit browsers (Chrome, Safari) */
-.comment-list::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 8px;
     background-color: transparent;
 }
 
-.comment-list::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background-color: #a2c3de; /* Thumb color */
     border-radius: 6px;
 }
 
-.comment-list::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background-color: #f1f1f3; /* Track color */
+}
+
+
+html.dark ::-webkit-scrollbar {
+    width: 8px;
+    background-color: transparent;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+    background-color: #031a25; /* Thumb color */
+    border-radius: 6px;
+}
+
+html.dark ::-webkit-scrollbar-track {
+    background-color: #0a2d3e; /* Track color */
+}
+
+html.dark .ck-reset_all :not(.ck-reset_all-excluded *),
+html.dark .ck.ck-reset_all {
+    color: white;
+}
+
+html.dark .ck.ck-toolbar {
+    background-color: rgb(30, 41, 59);
+}
+
+html.dark .ck.ck-button:not(.ck-disabled):hover,
+html.dark a.ck.ck-button:not(.ck-disabled):hover,
+html.dark .ck.ck-button:not(.ck-disabled):active,
+html.dark a.ck.ck-button:not(.ck-disabled):active,
+html.dark .ck.ck-button.ck-on,
+html.dark a.ck.ck-button.ck-on{
+    background-color: rgb(15, 23, 42);
+}
+
+html.dark .ck.ck-editor__main>.ck-editor__editable {
+    background-color: rgb(30, 41, 59);
+    color: white;
+}
+
+html.dark .ck.ck-list {
+    background-color: rgb(30, 41, 59);
 }
