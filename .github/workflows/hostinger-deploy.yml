@@ -22,16 +22,7 @@ jobs:
         run: npm ci
       - name: Setup Project
         run: |
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan key:generate
           npm run build
-      - name: Directory Permissions
-        run: chmod 755 -R storage bootstrap/cache
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Deploy PHP to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
@@ -47,7 +38,6 @@ jobs:
             git pull
             php composer.phar install
             php artisan migrate --force
-
       - name: Install SSH key
         run: |
           mkdir -p ~/.ssh/
