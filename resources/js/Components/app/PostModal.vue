@@ -106,7 +106,6 @@ function submit() {
         form.post(route('post.update', props.post.id), {
             preserveScroll: true,
             onSuccess: (res) => {
-                console.log(res)
                 closeModal()
             },
             onError: (errors) => {
@@ -218,7 +217,6 @@ function fetchPreview(url) {
 
 
 function onInputChange() {
-    console.log("222222222")
     let url = matchHref()
 
     if (!url) {

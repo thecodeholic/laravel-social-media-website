@@ -12,7 +12,7 @@ defineProps({
         <img :src="preview.image"
              class="max-w-full"
              :alt="preview.title"/>
-        <div class="p-2">
+        <div class="p-2 dark:text-gray-900">
             <h3 class="font-semibold">{{ preview.title }}</h3>
             <p class="text-sm m-none">{{ preview.description }}</p>
         </div>
