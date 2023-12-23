@@ -244,7 +244,7 @@ function followUser() {
                                 <CreatePost />
                                 <PostList :posts="posts.data" class="flex-1"/>
                             </template>
-                            <div v-else class="py-8 text-center">
+                            <div v-else class="py-8 text-center dark:text-gray-100">
                                 You don't have permission to view these posts.
                             </div>
                         </TabPanel>

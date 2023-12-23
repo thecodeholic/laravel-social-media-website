@@ -32,6 +32,7 @@ class ProfileController extends Controller
         $posts = Post::postsForTimeline(Auth::id(), false)
             ->leftJoin('users AS u', 'u.pinned_post_id', 'posts.id')
             ->where('user_id', $user->id)
+            ->whereNull('group_id')
             ->orderBy('u.pinned_post_id', 'desc')
             ->orderBy('posts.created_at', 'desc')
             ->paginate(10);

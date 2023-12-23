@@ -260,7 +260,6 @@ function matchLink() {
 <template>
     <BaseModal :title="post.id ? 'Update Post' : 'Create Post'"
                v-model="show"
-               class="dark:text-gray-100"
                @hide="closeModal">
         <div class="p-4">
             <PostUserHeader :post="post" :show-time="false" class="mb-4 dark:text-gray-100"/>
