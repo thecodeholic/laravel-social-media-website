@@ -1,5 +1,7 @@
 services:
     laravel.test:
+        labels:
+            - dev.orbstack.domains=${APP_NAME}.local
         build:
             context: ./docker/8.2
             dockerfile: Dockerfile
@@ -93,6 +95,7 @@ services:
         networks:
             - sail
     selenium:
+        platform: linux/amd64
         image: selenium/standalone-chrome
         extra_hosts:
             - 'host.docker.internal:host-gateway'
