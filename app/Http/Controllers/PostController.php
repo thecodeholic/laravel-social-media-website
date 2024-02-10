@@ -66,18 +66,21 @@ class PostController extends Controller
 
             /** @var \Illuminate\Http\UploadedFile[] $files */
             $files = $data['attachments'] ?? [];
+            $attachments = [];
             foreach ($files as $file) {
                 $path = $file->store('attachments/' . $post->id, 'public');
                 $allFilePaths[] = $path;
-                PostAttachment::create([
+                $attachments[] = [
                     'post_id' => $post->id,
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
                     'mime' => $file->getMimeType(),
                     'size' => $file->getSize(),
                     'created_by' => $user->id
-                ]);
+                ];
             }
+
+            PostAttachment::insert($attachments);
 
             DB::commit();
 
@@ -92,9 +95,7 @@ class PostController extends Controller
             Notification::send($followers, new PostCreated($post, $user, null));
 
         } catch (\Exception $e) {
-            foreach ($allFilePaths as $path) {
-                Storage::disk('public')->delete($path);
-            }
+            Storage::disk('public')->delete($allFilePaths);
             DB::rollBack();
             throw $e;
         }
@@ -117,35 +118,33 @@ class PostController extends Controller
 
             $deleted_ids = $data['deleted_file_ids'] ?? []; // 1, 2, 3, 4
 
-            $attachments = PostAttachment::query()
-                ->where('post_id', $post->id)
-                ->whereIn('id', $deleted_ids)
-                ->get();
-
-            foreach ($attachments as $attachment) {
-                $attachment->delete();
-            }
+            // Deleting posts attachments
+            PostAttachment::query()
+                    ->where('post_id', $post->id)
+                    ->whereIn('id', $deleted_ids)
+                    ->delete();
 
             /** @var \Illuminate\Http\UploadedFile[] $files */
             $files = $data['attachments'] ?? [];
+            $attachments = [];
             foreach ($files as $file) {
                 $path = $file->store('attachments/' . $post->id, 'public');
                 $allFilePaths[] = $path;
-                PostAttachment::create([
+                $attachments[] = [
                     'post_id' => $post->id,
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
                     'mime' => $file->getMimeType(),
                     'size' => $file->getSize(),
                     'created_by' => $user->id
-                ]);
+                ];
             }
+
+            PostAttachment::insert($attachments);
 
             DB::commit();
         } catch (\Exception $e) {
-            foreach ($allFilePaths as $path) {
-                Storage::disk('public')->delete($path);
-            }
+            Storage::disk('public')->delete($allFilePaths);
             DB::rollBack();
             throw $e;
         }
